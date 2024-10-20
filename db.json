@@ -1,0 +1,13 @@
+
+{"palavrasETemas":
+[
+  { "palavra": "ABACAXI", "tema": "Frutas" },
+  { "palavra": "ELEFANTE", "tema": "Animais" },
+  { "palavra": "BRASILIA", "tema": "Capitais" },
+  { "palavra": "JAVASCRIPT", "tema": "Linguagens de Programação" },
+  { "palavra": "CAVALO", "tema": "Animais" },
+  { "palavra": "BERLIM", "tema": "Capitais" },
+  { "palavra": "MORANGO", "tema": "Frutas" }
+  
+]
+}
