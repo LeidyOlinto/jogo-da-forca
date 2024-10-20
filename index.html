@@ -1,42 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <link rel="stylesheet" href="style.css">
-
+    <link rel="stylesheet" href="style.css" />
     <title>Jogo da Forca</title>
   </head>
   <body>
     <div class="container">
       <h1>Jogo da Forca</h1>
 
-
       <div class="dica" id="dica">Dica: _____</div>
 
       <div class="palavra" id="palavra">_ _ _ _ _ _</div>
-
-      <div class="letras-usadas" id="letras-usadas">Letras usadas: A, E, I</div>
 
       <div class="tentativas" id="tentativas-restantes">
         Tentativas restantes: 5
       </div>
 
-      <div class="forca" id="forca">O<br />/|\<br />/ \</div>
+      <figure id="container-imagem">
+        <img src="img/img-forca.png" alt="Forca" />
+      </figure>
 
-=======
-      
-      <div class="dica" id="tema">Tema: _____</div>
-      
-      <div class="palavra" id="palavra">_ _ _ _ _ _</div>
-      
-      <div class="letras-usadas" id="letras-usadas">Letras usadas: A, E, I</div>
-      
-      <div class="tentativas" id="tentativas-restantes">Tentativas restantes: 5</div>
-      
-      <div class="forca" id="forca">O<br>/|\<br>/ \</div>
-      
+      <div class="forca" id="forca">O<br />/|\<br />/ \</div>
 
       <div id="teclado">
         <button>A</button>
@@ -67,7 +53,6 @@
         <button>Z</button>
       </div>
 
-
       <div class="acoes">
         <div class="chute-container">
           <input
@@ -79,23 +64,12 @@
           <button class="chute-botao" id="chute-botao">Enviar</button>
         </div>
 
-        <button class="reiniciar-jogo" id="reiniciar-botao">Reiniciar Jogo</button>
+        <button class="reiniciar-jogo" id="reiniciar-botao">
+          Reiniciar Jogo
+        </button>
       </div>
     </div>
 
     <script src="./index.js"></script>
   </body>
 </html>
-
-      
-      <div class="acoes">
-          <button id="reiniciar-botao">Reiniciar Jogo</button>
-          <button class="chutar-palavra" id="chute-botao">Chutar Palavra</button>
-          <input type="text" id="chute-input" placeholder="Chute a palavra" />
-      </div>
-    </div>
-  
-    <script src="./index.js"></script>
-  </body>
-</html>
-
