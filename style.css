@@ -8,6 +8,10 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  background-image: url("img/forca-bg.jpeg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center   center;
 }
 
 /* Estilização do container principal */
