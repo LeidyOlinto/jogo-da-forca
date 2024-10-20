@@ -143,6 +143,6 @@ h1 {
   }
 
   .teclado {
-    grid-template-columns: repeat(5, 1fr); /* Ajuste para telas menores */
+    grid-template-columns: repeat(5, 1fr); 
   }
 }
