@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Jogo da Forca</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Jogo da Forca</h1>
+
+      <div class="dica" id="dica">Dica: _____</div>
+
+      <div class="palavra" id="palavra">_ _ _ _ _ _</div>
+
+      <div class="letras-usadas" id="letras-usadas">Letras usadas: A, E, I</div>
+
+      <div class="tentativas" id="tentativas-restantes">
+        Tentativas restantes: 5
+      </div>
+
+      <div class="forca" id="forca">O<br />/|\<br />/ \</div>
+
+      <div id="teclado">
+        <button>A</button>
+        <button>B</button>
+        <button>C</button>
+        <button>D</button>
+        <button>E</button>
+        <button>F</button>
+        <button>G</button>
+        <button>H</button>
+        <button>I</button>
+        <button>J</button>
+        <button>K</button>
+        <button>L</button>
+        <button>M</button>
+        <button>N</button>
+        <button>O</button>
+        <button>P</button>
+        <button>Q</button>
+        <button>R</button>
+        <button>S</button>
+        <button>T</button>
+        <button>U</button>
+        <button>V</button>
+        <button>W</button>
+        <button>X</button>
+        <button>Y</button>
+        <button>Z</button>
+      </div>
+
+      <div class="acoes">
+        <div class="chute-container">
+          <input
+            class="chute-input"
+            id="chute-input"
+            type="text"
+            placeholder="Chute a palavra aqui..."
+          />
+          <button class="chute-botao" id="chute-botao">Enviar</button>
+        </div>
+
+        <button class="reiniciar-jogo" id="reiniciar-botao">Reiniciar Jogo</button>
+      </div>
+    </div>
+
+    <script src="./index.js"></script>
+  </body>
+</html>
