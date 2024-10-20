@@ -1,7 +1,8 @@
 const exibirPalavra = document.getElementById("palavra");
-const exibirTema = document.getElementById("tema");
-const letrasUsadasExibicao = document.getElementById("letras-usadas");
-const tentativasRestantesExibicao = document.getElementById("tentativas-restantes");
+const exibirDica = document.getElementById("dica");
+const tentativasRestantesExibicao = document.getElementById(
+  "tentativas-restantes"
+);
 const forcaExibicao = document.getElementById("forca");
 const tecladoVirtual = document.getElementById("teclado");
 const chuteInput = document.getElementById("chute-input");
@@ -10,48 +11,58 @@ const reiniciarBotao = document.getElementById("reiniciar-botao");
 
 let estadoDoJogo = {
   palavra: "",
-  tema: "",
+  dica: "",
   tentativasRestantes: 6,
   letrasUsadas: new Set(),
   letrasCorretas: new Set(),
 };
 
+// Função para buscar uma palavra e dica de uma API externa
 async function buscarPalavra() {
   try {
     const response = await fetch("http://localhost:3000/palavrasETemas");
     const data = await response.json();
     estadoDoJogo.palavra = data.word.toUpperCase();
-    estadoDoJogo.tema = data.theme;
+    estadoDoJogo.dica = data.theme;
     atualizarExibicao();
   } catch (error) {
     console.error("Erro ao buscar a palavra:", error);
-    estadoDoJogo.palavra = "EXEMPLO"; 
-    estadoDoJogo.tema = "Demonstração";
+    estadoDoJogo.palavra = "EXEMPLO";
+    estadoDoJogo.dica = "Demonstração";
     atualizarExibicao();
   }
 }
 
+// Função para atualizar a exibição do jogo
 function atualizarExibicao() {
-  exibirTema.textContent = `Tema: ${estadoDoJogo.tema}`;
-  
+  exibirDica.textContent = `Dica: ${estadoDoJogo.dica}`;
   exibirPalavra.textContent = estadoDoJogo.palavra
     .split("")
     .map((letra) => (estadoDoJogo.letrasCorretas.has(letra) ? letra : "_"))
     .join(" ");
 
-  letrasUsadasExibicao.textContent = `Letras usadas: ${Array.from(estadoDoJogo.letrasUsadas).join(", ")}`;
+  /* Exibe as letras usadas
+  letrasUsadasExibicao.textContent = `Letras usadas: ${Array.from(
+    estadoDoJogo.letrasUsadas
+  ).join(", ")}`;*/
 
+  // Exibe as tentativas restantes
   tentativasRestantesExibicao.textContent = `Tentativas restantes: ${estadoDoJogo.tentativasRestantes}`;
 
+  // Atualiza a forca (desenho pode ser feito por etapas)
   forcaExibicao.textContent = desenharForca(estadoDoJogo.tentativasRestantes);
 }
 
+// Função para verificar a letra
 function verificarLetra(letra) {
-  if (estadoDoJogo.letrasUsadas.has(letra) || estadoDoJogo.letrasCorretas.has(letra)) {
+  if (
+    estadoDoJogo.letrasUsadas.has(letra) ||
+    estadoDoJogo.letrasCorretas.has(letra)
+  ) {
     alert("Essa letra já foi tentada!");
-    return; 
+    return;
   }
-  
+
   estadoDoJogo.letrasUsadas.add(letra);
 
   if (estadoDoJogo.palavra.includes(letra)) {
@@ -67,67 +78,109 @@ function verificarLetra(letra) {
 function verificarPalavra(chute) {
   if (chute.toUpperCase() === estadoDoJogo.palavra) {
     estadoDoJogo.letrasCorretas = new Set(estadoDoJogo.palavra.split(""));
+    alert("Você acertou a palavra!");
   } else {
     estadoDoJogo.tentativasRestantes--;
+    alert("Chute errado! Tente novamente.");
   }
 
   verificarFimDeJogo();
   atualizarExibicao();
 }
 
+// Função para verificar se o jogo acabou
 function verificarFimDeJogo() {
-  if (estadoDoJogo.palavra.split("").every((letra) => estadoDoJogo.letrasCorretas.has(letra))) {
-    alert("Parabéns, você venceu!");
-    reiniciarJogo();
+  if (
+    estadoDoJogo.palavra
+      .split("")
+      .every((letra) => estadoDoJogo.letrasCorretas.has(letra))
+  ) {
+    atualizarExibicao();
+
+    setTimeout(() => {
+      alert("Parabéns, você venceu!");
+      reiniciarJogo();
+    }, 100);
   } else if (estadoDoJogo.tentativasRestantes === 0) {
-    alert(`Você perdeu! A palavra era: ${estadoDoJogo.palavra}`);
-    reiniciarJogo();
+    atualizarExibicao();
+    setTimeout(() => {
+      alert("Fim do jogo! Você foi enforcado.");
+      reiniciarJogo();
+    }, 100);
   }
 }
 
 function reiniciarJogo() {
   estadoDoJogo = {
     palavra: "",
-    tema: "",
+    dica: "",
     tentativasRestantes: 6,
     letrasUsadas: new Set(),
     letrasCorretas: new Set(),
   };
+
+  resetarTecladoVirtual();
   buscarPalavra();
 }
+
 function desenharForca(tentativasRestantes) {
   const estagiosDaForca = [
-    " O\n/|\\\n/ \\",   // Completo
-    " O\n/|\\\n/",     // 1 perna faltando
-    " O\n/|\\",        // Corpo completo sem pernas
-    " O\n/|",          // Sem um braço
-    " O\n |",          // Sem os dois braços
-    " O",              // Só a cabeça
-    "",                // Nada
+    "", // Nada (inicial, sem erros)
+    " O", // Só a cabeça
+    " O\n |", // Corpo sem braços
+    " O\n/|", // Com um braço
+    " O\n/|\\", // Corpo completo sem pernas
+    " O\n/|\\\n/", // 1 perna faltando
+    " O\n/|\\\n/ \\", // Completo
   ];
-  return estagiosDaForca[estagiosDaForca.length - 1 - tentativasRestantes];
+
+  return estagiosDaForca[6 - tentativasRestantes];
 }
 
+// Função para capturar a interação com o teclado virtual
 function lidarComTecladoVirtual(event) {
-console.log("deu certo")
   const alvo = event.target;
+
   if (alvo.tagName === "BUTTON") {
     const letra = alvo.textContent.toUpperCase();
-    console.log(letra)
+
+    // Verificar a letra como antes
     verificarLetra(letra);
+
+    // Aplicar estilo de tecla já utilizada
+    alvo.disabled = true;
+    alvo.style.backgroundColor = "#ccc";
+    alvo.style.color = "#000";
   }
 }
 
+// Função para resetar o teclado virtual
+function resetarTecladoVirtual() {
+  const teclas = tecladoVirtual.querySelectorAll("button");
+  teclas.forEach((tecla) => {
+    tecla.disabled = false;
+    tecla.style.backgroundColor = "";
+    tecla.style.color = "";
+  });
+}
+
+// Função para capturar o chute da palavra inteira
 function lidarComChutePalavra() {
-  const chute = chuteInput.value;
+  const chute = chuteInput.value.trim();
+
+  if (!chute) {
+    alert("Por favor, insira um chute!");
+    return;
+  }
+
   verificarPalavra(chute);
   chuteInput.value = "";
 }
 
-
+// Eventos do jogo
 tecladoVirtual.addEventListener("click", lidarComTecladoVirtual);
 chuteBotao.addEventListener("click", lidarComChutePalavra);
 reiniciarBotao.addEventListener("click", reiniciarJogo);
 
+// Inicializa o jogo
 buscarPalavra();
-  
