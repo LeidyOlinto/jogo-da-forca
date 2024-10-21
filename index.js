@@ -17,13 +17,12 @@ let estadoDoJogo = {
   letrasCorretas: new Set(),
 };
 
-// Função para buscar uma palavra e dica de uma API externa
 async function buscarPalavra() {
   try {
     const response = await fetch("http://localhost:3000/palavrasETemas");
     const data = await response.json();
-    estadoDoJogo.palavra = data.word.toUpperCase();
-    estadoDoJogo.dica = data.theme;
+    estadoDoJogo.palavra = data[0].palavra; 
+    estadoDoJogo.dica = data[0].Dica; 
     atualizarExibicao();
   } catch (error) {
     console.error("Erro ao buscar a palavra:", error);
@@ -33,7 +32,7 @@ async function buscarPalavra() {
   }
 }
 
-// Função para atualizar a exibição do jogo
+
 function atualizarExibicao() {
   exibirDica.textContent = `Dica: ${estadoDoJogo.dica}`;
   exibirPalavra.textContent = estadoDoJogo.palavra
@@ -41,10 +40,8 @@ function atualizarExibicao() {
     .map((letra) => (estadoDoJogo.letrasCorretas.has(letra) ? letra : "_"))
     .join(" ");
 
-  /* Exibe as letras usadas
-  letrasUsadasExibicao.textContent = `Letras usadas: ${Array.from(
-    estadoDoJogo.letrasUsadas
-  ).join(", ")}`;*/
+  
+  // letrasUsadasExibicao.textContent = `Letras usadas: ${Array.from( estadoDoJogo.letrasUsadas).join(", ")}`;
 
   // Exibe as tentativas restantes
   tentativasRestantesExibicao.textContent = `Tentativas restantes: ${estadoDoJogo.tentativasRestantes}`;
