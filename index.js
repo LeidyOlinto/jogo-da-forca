@@ -17,6 +17,30 @@ let estadoDoJogo = {
   letrasCorretas: new Set(),
 };
 
+// Função para salvar estatísticas no localStorage
+function salvarEstatisticas(tentativasRestantes, venceu) {
+  const estatisticas = JSON.parse(localStorage.getItem('estatisticas')) || [];
+  
+  estatisticas.push({
+    tentativasRestantes: tentativasRestantes,
+    venceu: venceu,
+    data: new Date().toISOString(),
+  });
+
+  localStorage.setItem('estatisticas', JSON.stringify(estatisticas));
+}
+
+// Função para carregar estatísticas do localStorage
+function carregarEstatisticas() {
+  return JSON.parse(localStorage.getItem('estatisticas')) || [];
+}
+
+// Função para exibir estatísticas no console (pode ser adaptada para a interface)
+function exibirEstatisticas() {
+  const estatisticas = carregarEstatisticas();
+  console.log('Estatísticas de Jogo:', estatisticas);
+}
+
 async function buscarPalavra() {
   try {
     const response = await fetch("http://localhost:3000/palavrasETemas");
@@ -32,7 +56,6 @@ async function buscarPalavra() {
   }
 }
 
-
 function atualizarExibicao() {
   exibirDica.textContent = `Dica: ${estadoDoJogo.dica}`;
   exibirPalavra.textContent = estadoDoJogo.palavra
@@ -40,8 +63,8 @@ function atualizarExibicao() {
     .map((letra) => (estadoDoJogo.letrasCorretas.has(letra) ? letra : "_"))
     .join(" ");
 
-  
-  // letrasUsadasExibicao.textContent = `Letras usadas: ${Array.from( estadoDoJogo.letrasUsadas).join(", ")}`;
+  // // Atualiza a exibição das letras usadas
+  // letrasUsadasExibicao.textContent = `Letras usadas: ${Array.from(estadoDoJogo.letrasUsadas).join(", ")}`;
 
   // Exibe as tentativas restantes
   tentativasRestantesExibicao.textContent = `Tentativas restantes: ${estadoDoJogo.tentativasRestantes}`;
@@ -93,13 +116,14 @@ function verificarFimDeJogo() {
       .every((letra) => estadoDoJogo.letrasCorretas.has(letra))
   ) {
     atualizarExibicao();
-
+    salvarEstatisticas(estadoDoJogo.tentativasRestantes, true); // Venceu
     setTimeout(() => {
       alert("Parabéns, você venceu!");
       reiniciarJogo();
     }, 100);
   } else if (estadoDoJogo.tentativasRestantes === 0) {
     atualizarExibicao();
+    salvarEstatisticas(0, false); // Perdeu
     setTimeout(() => {
       alert("Fim do jogo! Você foi enforcado.");
       reiniciarJogo();
@@ -181,3 +205,4 @@ reiniciarBotao.addEventListener("click", reiniciarJogo);
 
 // Inicializa o jogo
 buscarPalavra();
+
