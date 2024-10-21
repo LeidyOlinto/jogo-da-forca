@@ -12,11 +12,12 @@ body {
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-position: center   center;
+  flex-flow: column;
 }
 
 /* Estilização do container principal */
 .container {
-  width: 400px;
+  width: 800px;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -61,25 +62,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-/* Container da imagem (forca) */
-#container-imagem {
-  width: 200px;
-  height: 300px;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
-}
-
 /* Estilo da forca e boneco */
 #forca {
   font-size: 32px;
   margin: 0;
   position: absolute;
-  top: 32%;
-  left: 54.5%;
+  top: 37%;
+  left: 53.8%;
   z-index: 2;
   white-space: pre;
   line-height: 1.2;
@@ -88,10 +77,8 @@ h1 {
 /* Teclado */
 #teclado {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(9, 1fr);
   gap: 5px;
-  margin: 20px auto;
-  max-width: 500px;
 }
 
 #teclado button {
