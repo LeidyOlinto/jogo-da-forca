@@ -92,3 +92,6 @@ plaintext
 +------------------------------+
 |  [Chutar palavra] [Reiniciar] |
 +------------------------------+
+
+Certifique-se de que o json-server está rodando com:
+json-server --watch db.json --port 3000
