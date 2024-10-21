@@ -1,13 +1,13 @@
 
 {"palavrasETemas":
 [
-  { "palavra": "ABACAXI", "tema": "Frutas" },
-  { "palavra": "ELEFANTE", "tema": "Animais" },
-  { "palavra": "BRASILIA", "tema": "Capitais" },
-  { "palavra": "JAVASCRIPT", "tema": "Linguagens de Programação" },
-  { "palavra": "CAVALO", "tema": "Animais" },
-  { "palavra": "BERLIM", "tema": "Capitais" },
-  { "palavra": "MORANGO", "tema": "Frutas" }
+  { "palavra": "ABACAXI", "Dica": "Frutas" },
+  { "palavra": "ELEFANTE", "Dica": "Animais" },
+  { "palavra": "BRASILIA", "Dica": "Capitais" },
+  { "palavra": "JAVASCRIPT", "Dica": "Linguagens de Programação" },
+  { "palavra": "CAVALO", "Dica": "Animais" },
+  { "palavra": "BERLIM", "Dica": "Capitais" },
+  { "palavra": "MORANGO", "Dica": "Frutas" }
   
 ]
 }
