@@ -10,12 +10,15 @@ const chuteBotao = document.getElementById("chute-botao");
 const reiniciarBotao = document.getElementById("reiniciar-botao");
 
 let estadoDoJogo = {
+  palavrasETemas: [], 
+  palavraAtualIndex: 0, 
   palavra: "",
   dica: "",
   tentativasRestantes: 6,
   letrasUsadas: new Set(),
   letrasCorretas: new Set(),
 };
+
 
 // Função para salvar estatísticas no localStorage
 function salvarEstatisticas(tentativasRestantes, venceu) {
@@ -41,20 +44,40 @@ function exibirEstatisticas() {
   console.log('Estatísticas de Jogo:', estatisticas);
 }
 
-async function buscarPalavra() {
+async function buscarPalavras() {
   try {
     const response = await fetch("http://localhost:3000/palavrasETemas");
+    if (!response.ok) {
+      throw new Error(`Erro na API: ${response.status} - ${response.statusText}`);
+    }
+
     const data = await response.json();
-    estadoDoJogo.palavra = data[0].palavra; 
-    estadoDoJogo.dica = data[0].Dica; 
-    atualizarExibicao();
+    estadoDoJogo.palavrasETemas = data; 
+    estadoDoJogo.palavraAtualIndex = 0; 
+    carregarPalavraAtual(); 
   } catch (error) {
-    console.error("Erro ao buscar a palavra:", error);
-    estadoDoJogo.palavra = "EXEMPLO";
-    estadoDoJogo.dica = "Demonstração";
-    atualizarExibicao();
+    console.error("Erro ao buscar as palavras:", error.message);
+    estadoDoJogo.palavrasETemas = [
+      { palavra: "EXEMPLO", Dica: "Demonstração" },
+    ];
+    estadoDoJogo.palavraAtualIndex = 0;
+    carregarPalavraAtual();
   }
 }
+
+function carregarPalavraAtual() {
+  const palavraTema = estadoDoJogo.palavrasETemas[estadoDoJogo.palavraAtualIndex];
+  estadoDoJogo.palavra = palavraTema.palavra;
+  estadoDoJogo.dica = palavraTema.Dica;
+
+  estadoDoJogo.letrasUsadas.clear();
+  estadoDoJogo.letrasCorretas.clear();
+  estadoDoJogo.tentativasRestantes = 6;
+
+  atualizarExibicao();
+}
+
+
 
 function atualizarExibicao() {
   exibirDica.textContent = `Dica: ${estadoDoJogo.dica}`;
@@ -110,20 +133,26 @@ function verificarPalavra(chute) {
 
 // Função para verificar se o jogo acabou
 function verificarFimDeJogo() {
-  if (
-    estadoDoJogo.palavra
-      .split("")
-      .every((letra) => estadoDoJogo.letrasCorretas.has(letra))
-  ) {
-    atualizarExibicao();
-    salvarEstatisticas(estadoDoJogo.tentativasRestantes, true); // Venceu
+  const palavraCompleta = estadoDoJogo.palavra
+    .split("")
+    .every((letra) => estadoDoJogo.letrasCorretas.has(letra));
+
+  if (palavraCompleta) {
+    salvarEstatisticas(estadoDoJogo.tentativasRestantes, true); 
+
     setTimeout(() => {
-      alert("Parabéns, você venceu!");
-      reiniciarJogo();
+      alert("Parabéns, você acertou a palavra!");
+
+      estadoDoJogo.palavraAtualIndex++;
+      if (estadoDoJogo.palavraAtualIndex < estadoDoJogo.palavrasETemas.length) {
+        carregarPalavraAtual(); 
+      } else {
+        alert("Você completou todas as palavras! Reiniciando o jogo...");
+        reiniciarJogo();
+      }
     }, 100);
   } else if (estadoDoJogo.tentativasRestantes === 0) {
-    atualizarExibicao();
-    salvarEstatisticas(0, false); // Perdeu
+    salvarEstatisticas(0, false); 
     setTimeout(() => {
       alert("Fim do jogo! Você foi enforcado.");
       reiniciarJogo();
@@ -131,8 +160,11 @@ function verificarFimDeJogo() {
   }
 }
 
+
 function reiniciarJogo() {
   estadoDoJogo = {
+    palavrasETemas: [],
+    palavraAtualIndex: 0,
     palavra: "",
     dica: "",
     tentativasRestantes: 6,
@@ -141,8 +173,9 @@ function reiniciarJogo() {
   };
 
   resetarTecladoVirtual();
-  buscarPalavra();
+  buscarPalavras(); 
 }
+
 
 function desenharForca(tentativasRestantes) {
   const estagiosDaForca = [
@@ -204,5 +237,5 @@ chuteBotao.addEventListener("click", lidarComChutePalavra);
 reiniciarBotao.addEventListener("click", reiniciarJogo);
 
 // Inicializa o jogo
-buscarPalavra();
+buscarPalavras();
 
