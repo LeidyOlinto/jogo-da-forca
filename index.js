@@ -108,11 +108,28 @@ function verificarLetra(letra) {
 
   estadoDoJogo.letrasUsadas.add(letra);
 
-  if (estadoDoJogo.palavra.includes(letra)) {
-    estadoDoJogo.letrasCorretas.add(letra);
-  } else {
-    estadoDoJogo.tentativasRestantes--;
-  }
+  // Pegar todos os botões do teclado
+  const botoesTeclado = document.querySelectorAll("#teclado button");
+
+  botoesTeclado.forEach((botao) => {
+    if (botao.textContent.toUpperCase() === letra) {
+      if (estadoDoJogo.palavra.includes(letra)) {
+        estadoDoJogo.letrasCorretas.add(letra);
+
+        // Se a letra estiver correta, muda a cor para verde
+        botao.style.backgroundColor = "green";
+        botao.style.color = "white";
+      } else {
+        estadoDoJogo.tentativasRestantes--;
+
+        // Se a letra estiver incorreta, muda a cor para cinza claro
+        botao.style.backgroundColor = "#ccc";
+        botao.style.color = "#000";
+      }
+
+      botao.disabled = true; // Desabilitar a tecla após o uso
+    }
+  });
 
   verificarFimDeJogo();
   atualizarExibicao();
@@ -142,9 +159,9 @@ function verificarFimDeJogo() {
 
     setTimeout(() => {
       alert("Parabéns, você acertou a palavra!");
-      
+
       resetarTecladoVirtual(); // Reseta o teclado após acertar
-      
+
       estadoDoJogo.palavraAtualIndex++;
       if (estadoDoJogo.palavraAtualIndex < estadoDoJogo.palavrasETemas.length) {
         carregarPalavraAtual();
@@ -157,27 +174,21 @@ function verificarFimDeJogo() {
     salvarEstatisticas(0, false);
     setTimeout(() => {
       alert("Fim do jogo! Você foi enforcado.");
-      
+
       resetarTecladoVirtual(); // Reseta o teclado após errar
-      
+
       reiniciarJogo();
     }, 100);
   }
 }
 
 function reiniciarJogo() {
-  estadoDoJogo = {
-    palavrasETemas: [],
-    palavraAtualIndex: 0,
-    palavra: "",
-    dica: "",
-    tentativasRestantes: 6,
-    letrasUsadas: new Set(),
-    letrasCorretas: new Set(),
-  };
+  estadoDoJogo.tentativasRestantes = 6;
+  estadoDoJogo.letrasUsadas.clear();
+  estadoDoJogo.letrasCorretas.clear();
 
   resetarTecladoVirtual();
-  buscarPalavras();
+  atualizarExibicao();
 }
 
 function desenharForca(tentativasRestantes) {
