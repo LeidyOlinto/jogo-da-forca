@@ -46,6 +46,7 @@ function exibirEstatisticas() {
 async function buscarPalavras() {
   try {
     const response = await fetch("http://localhost:3000/palavrasETemas");
+    console.log(response )
     if (!response.ok) {
       throw new Error(
         `Erro na API: ${response.status} - ${response.statusText}`
@@ -124,15 +125,9 @@ function verificarLetra(letra) {
       if (estadoDoJogo.palavra.includes(letra)) {
         estadoDoJogo.letrasCorretas.add(letra);
 
-        // Se a letra estiver correta, muda a cor para verde
-        botao.style.backgroundColor = "green";
-        botao.style.color = "white";
       } else {
         estadoDoJogo.tentativasRestantes--;
 
-        // Se a letra estiver incorreta, muda a cor para cinza claro
-        botao.style.backgroundColor = "#ccc";
-        botao.style.color = "#000";
       }
 
       botao.disabled = true; // Desabilitar a tecla após o uso
