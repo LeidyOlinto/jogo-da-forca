@@ -1,13 +1,13 @@
 const exibirPalavra = document.getElementById("palavra");
 const exibirDica = document.getElementById("dica");
-const tentativasRestantesExibicao = document.getElementById(
-  "tentativas-restantes"
-);
+const tentativasRestantesExibicao = document.getElementById("tentativas-restantes");
 const forcaExibicao = document.getElementById("forca");
 const tecladoVirtual = document.getElementById("teclado");
 const chuteInput = document.getElementById("chute-input");
 const chuteBotao = document.getElementById("chute-botao");
 const reiniciarBotao = document.getElementById("reiniciar-botao");
+const letrasUsadasExibicao = document.getElementById("letras-usadas");
+
 
 let estadoDoJogo = {
   palavrasETemas: [], 
@@ -96,6 +96,14 @@ function atualizarExibicao() {
   forcaExibicao.textContent = desenharForca(estadoDoJogo.tentativasRestantes);
 }
 
+function atualizarLetrasUsadas() {
+  const letrasArray = Array.from(estadoDoJogo.letrasUsadas).sort();
+  letrasUsadasExibicao.textContent = letrasArray.length > 0 
+    ? letrasArray.join(", ") 
+    : "Nenhuma letra tentada.";
+}
+ 
+
 // Função para verificar a letra
 function verificarLetra(letra) {
   if (
@@ -114,6 +122,7 @@ function verificarLetra(letra) {
     estadoDoJogo.tentativasRestantes--;
   }
 
+  atualizarLetrasUsadas(); 
   verificarFimDeJogo();
   atualizarExibicao();
 }
@@ -173,6 +182,7 @@ function reiniciarJogo() {
   };
 
   resetarTecladoVirtual();
+  atualizarLetrasUsadas();
   buscarPalavras(); 
 }
 
