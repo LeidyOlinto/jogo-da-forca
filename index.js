@@ -10,8 +10,8 @@ const chuteBotao = document.getElementById("chute-botao");
 const reiniciarBotao = document.getElementById("reiniciar-botao");
 
 let estadoDoJogo = {
-  palavrasETemas: [], 
-  palavraAtualIndex: 0, 
+  palavrasETemas: [],
+  palavraAtualIndex: 0,
   palavra: "",
   dica: "",
   tentativasRestantes: 6,
@@ -19,42 +19,43 @@ let estadoDoJogo = {
   letrasCorretas: new Set(),
 };
 
-
 // Função para salvar estatísticas no localStorage
 function salvarEstatisticas(tentativasRestantes, venceu) {
-  const estatisticas = JSON.parse(localStorage.getItem('estatisticas')) || [];
-  
+  const estatisticas = JSON.parse(localStorage.getItem("estatisticas")) || [];
+
   estatisticas.push({
     tentativasRestantes: tentativasRestantes,
     venceu: venceu,
     data: new Date().toISOString(),
   });
 
-  localStorage.setItem('estatisticas', JSON.stringify(estatisticas));
+  localStorage.setItem("estatisticas", JSON.stringify(estatisticas));
 }
 
 // Função para carregar estatísticas do localStorage
 function carregarEstatisticas() {
-  return JSON.parse(localStorage.getItem('estatisticas')) || [];
+  return JSON.parse(localStorage.getItem("estatisticas")) || [];
 }
 
 // Função para exibir estatísticas no console (pode ser adaptada para a interface)
 function exibirEstatisticas() {
   const estatisticas = carregarEstatisticas();
-  console.log('Estatísticas de Jogo:', estatisticas);
+  console.log("Estatísticas de Jogo:", estatisticas);
 }
 
 async function buscarPalavras() {
   try {
     const response = await fetch("http://localhost:3000/palavrasETemas");
     if (!response.ok) {
-      throw new Error(`Erro na API: ${response.status} - ${response.statusText}`);
+      throw new Error(
+        `Erro na API: ${response.status} - ${response.statusText}`
+      );
     }
 
     const data = await response.json();
-    estadoDoJogo.palavrasETemas = data; 
-    estadoDoJogo.palavraAtualIndex = 0; 
-    carregarPalavraAtual(); 
+    estadoDoJogo.palavrasETemas = data;
+    estadoDoJogo.palavraAtualIndex = 0;
+    carregarPalavraAtual();
   } catch (error) {
     console.error("Erro ao buscar as palavras:", error.message);
     estadoDoJogo.palavrasETemas = [
@@ -66,7 +67,8 @@ async function buscarPalavras() {
 }
 
 function carregarPalavraAtual() {
-  const palavraTema = estadoDoJogo.palavrasETemas[estadoDoJogo.palavraAtualIndex];
+  const palavraTema =
+    estadoDoJogo.palavrasETemas[estadoDoJogo.palavraAtualIndex];
   estadoDoJogo.palavra = palavraTema.palavra;
   estadoDoJogo.dica = palavraTema.Dica;
 
@@ -76,8 +78,6 @@ function carregarPalavraAtual() {
 
   atualizarExibicao();
 }
-
-
 
 function atualizarExibicao() {
   exibirDica.textContent = `Dica: ${estadoDoJogo.dica}`;
@@ -138,28 +138,32 @@ function verificarFimDeJogo() {
     .every((letra) => estadoDoJogo.letrasCorretas.has(letra));
 
   if (palavraCompleta) {
-    salvarEstatisticas(estadoDoJogo.tentativasRestantes, true); 
+    salvarEstatisticas(estadoDoJogo.tentativasRestantes, true);
 
     setTimeout(() => {
       alert("Parabéns, você acertou a palavra!");
-
+      
+      resetarTecladoVirtual(); // Reseta o teclado após acertar
+      
       estadoDoJogo.palavraAtualIndex++;
       if (estadoDoJogo.palavraAtualIndex < estadoDoJogo.palavrasETemas.length) {
-        carregarPalavraAtual(); 
+        carregarPalavraAtual();
       } else {
         alert("Você completou todas as palavras! Reiniciando o jogo...");
         reiniciarJogo();
       }
     }, 100);
   } else if (estadoDoJogo.tentativasRestantes === 0) {
-    salvarEstatisticas(0, false); 
+    salvarEstatisticas(0, false);
     setTimeout(() => {
       alert("Fim do jogo! Você foi enforcado.");
+      
+      resetarTecladoVirtual(); // Reseta o teclado após errar
+      
       reiniciarJogo();
     }, 100);
   }
 }
-
 
 function reiniciarJogo() {
   estadoDoJogo = {
@@ -173,9 +177,8 @@ function reiniciarJogo() {
   };
 
   resetarTecladoVirtual();
-  buscarPalavras(); 
+  buscarPalavras();
 }
-
 
 function desenharForca(tentativasRestantes) {
   const estagiosDaForca = [
@@ -238,4 +241,3 @@ reiniciarBotao.addEventListener("click", reiniciarJogo);
 
 // Inicializa o jogo
 buscarPalavras();
-
