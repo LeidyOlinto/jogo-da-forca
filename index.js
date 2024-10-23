@@ -87,9 +87,6 @@ function atualizarExibicao() {
     .map((letra) => (estadoDoJogo.letrasCorretas.has(letra) ? letra : "_"))
     .join(" ");
 
-  // // Atualiza a exibição das letras usadas
-  // letrasUsadasExibicao.textContent = `Letras usadas: ${Array.from(estadoDoJogo.letrasUsadas).join(", ")}`;
-
   // Exibe as tentativas restantes
   tentativasRestantesExibicao.textContent = `Tentativas restantes: ${estadoDoJogo.tentativasRestantes}`;
 
@@ -124,12 +121,9 @@ function verificarLetra(letra) {
     if (botao.textContent.toUpperCase() === letra) {
       if (estadoDoJogo.palavra.includes(letra)) {
         estadoDoJogo.letrasCorretas.add(letra);
-
       } else {
         estadoDoJogo.tentativasRestantes--;
-
       }
-
       botao.disabled = true; // Desabilitar a tecla após o uso
     }
   });
@@ -178,7 +172,6 @@ function verificarFimDeJogo() {
     salvarEstatisticas(0, false);
     setTimeout(() => {
       alert("Fim do jogo! Você foi enforcado.");
-
       resetarTecladoVirtual(); // Reseta o teclado após errar
 
       reiniciarJogo();
@@ -192,7 +185,6 @@ function reiniciarJogo() {
   estadoDoJogo.letrasCorretas.clear();
 
   resetarTecladoVirtual();
-
   atualizarLetrasUsadas();
   buscarPalavras(); 
   atualizarExibicao();
@@ -247,7 +239,6 @@ function lidarComChutePalavra() {
     alert("Por favor, insira um chute!");
     return;
   }
-
   verificarPalavra(chute);
   chuteInput.value = "";
 }
